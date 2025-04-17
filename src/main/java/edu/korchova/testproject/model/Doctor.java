@@ -18,17 +18,18 @@ import java.util.Objects;
 @AllArgsConstructor
 @Data
 @Document
-public class Doctor {
+@Builder
+public class Doctor extends AuditMetadata{
     @Id
     private String id;
     private String name;
-    private String code;
     private String specialization;
+    private String description;
 
-    public Doctor(String name, String code, String specialization) {
+    public Doctor(String name, String specialization, String description) {
         this.name = name;
-        this.code = code;
         this.specialization = specialization;
+        this.description = description;
     }
 
     @Override

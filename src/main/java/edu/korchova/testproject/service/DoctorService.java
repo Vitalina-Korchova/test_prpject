@@ -26,9 +26,9 @@ public class DoctorService {
     private final DoctorRepository doctorRepository;
 
     private List<Doctor> doctors = new ArrayList<>(Arrays.asList(
-            new Doctor("1", "Alice", "0000001", "therapist"),
-            new Doctor("2", "Max", "0000002", "ophthalmologist"),
-            new Doctor("3", "Lisa", "0000003", "surgeon")
+            new Doctor("1", "Alice", "therapist", "text"),
+            new Doctor("2", "Max", "ophthalmologist", "text"),
+            new Doctor("3", "Lisa", "surgeon", "text")
             ));
 
 
