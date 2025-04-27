@@ -9,6 +9,8 @@ package edu.korchova.testproject.controller;
 */
 
 import edu.korchova.testproject.model.Doctor;
+import edu.korchova.testproject.request.DoctorCreateRequest;
+import edu.korchova.testproject.request.DoctorUpdateRequest;
 import edu.korchova.testproject.service.DoctorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -48,4 +50,18 @@ public class DoctorRestController {
     public void delete(@PathVariable String id) {
         doctorService.delById(id);
     }
+
+
+    //dto
+    @PostMapping("/dto")
+    public Doctor insert(@RequestBody DoctorCreateRequest request) {
+        return doctorService.create(request);
+    }
+
+    @PutMapping("/dto")
+    public Doctor edit(@RequestBody DoctorUpdateRequest request) {
+        return doctorService.update(request);
+    }
+
+
 }

@@ -10,11 +10,14 @@ package edu.korchova.testproject.service;
 
 import edu.korchova.testproject.model.Doctor;
 import edu.korchova.testproject.repository.DoctorRepository;
+import edu.korchova.testproject.request.DoctorCreateRequest;
+import edu.korchova.testproject.request.DoctorUpdateRequest;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.print.Doc;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -50,11 +53,43 @@ public class DoctorService {
         return doctorRepository.save(doctor);
     }
 
+    public Doctor create(DoctorCreateRequest request) {
+        Doctor doctor = mapToDoctor(request);
+        doctor.setCreateDate(LocalDateTime.now());
+        doctor.setUpdateDate(new ArrayList<LocalDateTime>());
+        return doctorRepository.save(doctor);
+    }
+
     public  Doctor update(Doctor doctor) {
         return doctorRepository.save(doctor);
     }
 
+    public Doctor update(DoctorUpdateRequest request) {
+        Doctor doctorPersisted = doctorRepository.findById(request.id()).orElse(null);
+        if (doctorPersisted != null) {
+            List<LocalDateTime> updateDates = doctorPersisted.getUpdateDate();
+            updateDates.add(LocalDateTime.now());
+            Doctor itemToUpdate =
+                    Doctor.builder()
+                            .id(request.id())
+                            .name(request.name())
+                            .specialization(request.specialization())
+                            .description(request.description())
+                            .createDate(doctorPersisted.getCreateDate())
+                            .updateDate(updateDates)
+                            .build();
+            return doctorRepository.save(itemToUpdate);
+
+        }
+        return null;
+    }
+
     public void delById(String id) {
         doctorRepository.deleteById(id);
+    }
+
+    private Doctor mapToDoctor(DoctorCreateRequest request) {
+        Doctor doctor = new Doctor(request.name(), request.specialization(), request.description());
+        return doctor;
     }
 }

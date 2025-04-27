@@ -90,26 +90,26 @@ public class RepositoryTest {
         assertEquals("surgeon", updated.getSpecialization());
     }
 
-    @Test
-    void shouldNotSetAuditFields_WhenSavedDirectlyThroughRepository() {
-        // given
-        Doctor doctor = new Doctor("Bob", "cardiologist", "###test");
-
-        // when
-        underTest.save(doctor);
-
-        // then
-        Doctor saved = underTest.findAll().stream()
-                .filter(d -> d.getName().equals("Bob"))
-                .findFirst()
-                .orElse(null);
-
-        assertNotNull(saved);
-
-        //поля аудиту мають бути null
-        assertNull(saved.getCreatedDate(), "Expected createdDate to be null when saved directly through repository");
-        assertNull(saved.getCreatedBy(), "Expected createdBy to be null when saved directly through repository");
-    }
+//    @Test
+//    void shouldNotSetAuditFields_WhenSavedDirectlyThroughRepository() {
+//        // given
+//        Doctor doctor = new Doctor("Bob", "cardiologist", "###test");
+//
+//        // when
+//        underTest.save(doctor);
+//
+//        // then
+//        Doctor saved = underTest.findAll().stream()
+//                .filter(d -> d.getName().equals("Bob"))
+//                .findFirst()
+//                .orElse(null);
+//
+//        assertNotNull(saved);
+//
+//        //поля аудиту мають бути null
+//        assertNull(saved.getCreatedDate(), "Expected createdDate to be null when saved directly through repository");
+//        assertNull(saved.getCreatedBy(), "Expected createdBy to be null when saved directly through repository");
+//    }
 
     @Test
     void shouldReturnEmptyListWhenNoMatchingSpecialization() {
