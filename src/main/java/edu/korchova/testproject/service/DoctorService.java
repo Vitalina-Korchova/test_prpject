@@ -54,6 +54,9 @@ public class DoctorService {
     }
 
     public Doctor create(DoctorCreateRequest request) {
+        if (doctorRepository.existsBySpecialization(request.specialization())) {
+            return null;
+        }
         Doctor doctor = mapToDoctor(request);
         doctor.setCreateDate(LocalDateTime.now());
         doctor.setUpdateDate(new ArrayList<LocalDateTime>());
@@ -65,6 +68,11 @@ public class DoctorService {
     }
 
     public Doctor update(DoctorUpdateRequest request) {
+
+        if (doctorRepository.existsBySpecialization(request.specialization())) {
+            return null;
+        }
+
         Doctor doctorPersisted = doctorRepository.findById(request.id()).orElse(null);
         if (doctorPersisted != null) {
             List<LocalDateTime> updateDates = doctorPersisted.getUpdateDate();
