@@ -53,44 +53,45 @@ public class DoctorService {
         return doctorRepository.save(doctor);
     }
 
-    public Doctor create(DoctorCreateRequest request) {
-        if (doctorRepository.existsBySpecialization(request.specialization())) {
-            return null;
-        }
-        Doctor doctor = mapToDoctor(request);
-        doctor.setCreateDate(LocalDateTime.now());
-        doctor.setUpdateDate(new ArrayList<LocalDateTime>());
-        return doctorRepository.save(doctor);
-    }
-
     public  Doctor update(Doctor doctor) {
         return doctorRepository.save(doctor);
     }
 
-    public Doctor update(DoctorUpdateRequest request) {
-
+    public Doctor create(DoctorCreateRequest request) {
         if (doctorRepository.existsBySpecialization(request.specialization())) {
-            return null;
+            throw new IllegalArgumentException("Specialization already exists");
         }
-
-        Doctor doctorPersisted = doctorRepository.findById(request.id()).orElse(null);
-        if (doctorPersisted != null) {
-            List<LocalDateTime> updateDates = doctorPersisted.getUpdateDate();
-            updateDates.add(LocalDateTime.now());
-            Doctor itemToUpdate =
-                    Doctor.builder()
-                            .id(request.id())
-                            .name(request.name())
-                            .specialization(request.specialization())
-                            .description(request.description())
-                            .createDate(doctorPersisted.getCreateDate())
-                            .updateDate(updateDates)
-                            .build();
-            return doctorRepository.save(itemToUpdate);
-
-        }
-        return null;
+        Doctor doctor = mapToDoctor(request);
+        doctor.setCreateDate(LocalDateTime.now());
+        doctor.setUpdateDate(new ArrayList<>());
+        return doctorRepository.save(doctor);
     }
+
+    public Doctor update(DoctorUpdateRequest request) {
+        Doctor doctorPersisted = doctorRepository.findById(request.id()).orElseThrow(
+                () -> new IllegalArgumentException("Doctor not found")
+        );
+
+        if (!request.specialization().equals(doctorPersisted.getSpecialization())
+                && doctorRepository.existsBySpecialization(request.specialization())) {
+            throw new IllegalArgumentException("Specialization already exists");
+        }
+
+        List<LocalDateTime> updateDates = doctorPersisted.getUpdateDate();
+        updateDates.add(LocalDateTime.now());
+
+        Doctor itemToUpdate = Doctor.builder()
+                .id(request.id())
+                .name(request.name())
+                .specialization(request.specialization())
+                .description(request.description())
+                .createDate(doctorPersisted.getCreateDate())
+                .updateDate(updateDates)
+                .build();
+
+        return doctorRepository.save(itemToUpdate);
+    }
+
 
     public void delById(String id) {
         doctorRepository.deleteById(id);

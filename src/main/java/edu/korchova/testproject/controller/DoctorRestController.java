@@ -13,6 +13,8 @@ import edu.korchova.testproject.request.DoctorCreateRequest;
 import edu.korchova.testproject.request.DoctorUpdateRequest;
 import edu.korchova.testproject.service.DoctorService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,42 +28,65 @@ public class DoctorRestController {
 
     // read all
     @GetMapping
-    public List<Doctor> showAll() {
-        return doctorService.getAll();
+    public ResponseEntity<List<Doctor>> showAll() {
+        return ResponseEntity.ok(doctorService.getAll());
     }
 
     // read one
     @GetMapping("{id}")
-    public Doctor showOneById(@PathVariable String id) {
-        return doctorService.getById(id);
+    public ResponseEntity<?> showOneById(@PathVariable String id) {
+        Doctor doctor = doctorService.getById(id);
+        if (doctor == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Doctor not found");
+        }
+        return ResponseEntity.ok(doctor);
     }
 
     @PostMapping
-    public Doctor insert(@RequestBody Doctor doctor) {
-        return doctorService.create(doctor);
+    public ResponseEntity<Doctor> insert(@RequestBody Doctor doctor) {
+        return ResponseEntity.ok(doctorService.create(doctor));
     }
 
     @PutMapping
-    public Doctor edit(@RequestBody Doctor doctor) {
-        return doctorService.update(doctor);
+    public ResponseEntity<Doctor> edit(@RequestBody Doctor doctor) {
+        return ResponseEntity.ok(doctorService.update(doctor));
     }
 
     @DeleteMapping("{id}")
-    public void delete(@PathVariable String id) {
+    public ResponseEntity<?> delete(@PathVariable String id) {
+        Doctor doctor = doctorService.getById(id);
+        if (doctor == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Doctor not found");
+        }
         doctorService.delById(id);
+        return ResponseEntity.noContent().build();
     }
 
-
-    //dto
+    // DTO create
     @PostMapping("/dto")
-    public Doctor insert(@RequestBody DoctorCreateRequest request) {
-        return doctorService.create(request);
+    public ResponseEntity<?> insert(@RequestBody DoctorCreateRequest request) {
+        try {
+            Doctor created = doctorService.create(request);
+            return ResponseEntity.ok(created);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
+    // DTO update
     @PutMapping("/dto")
-    public Doctor edit(@RequestBody DoctorUpdateRequest request) {
-        return doctorService.update(request);
+    public ResponseEntity<?> edit(@RequestBody DoctorUpdateRequest request) {
+        try {
+            Doctor updated = doctorService.update(request);
+            return ResponseEntity.ok(updated);
+        } catch (IllegalArgumentException e) {
+            if (e.getMessage().equals("Doctor not found")) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            }
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
 
 }
+
