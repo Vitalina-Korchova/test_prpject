@@ -1,5 +1,5 @@
 ### GET ALL ITEMS
-GET http://localhost:8080/api/v1/doctors
+GET http://localhost:8080/api/v1/doctors/
 
 ###
 
@@ -9,12 +9,12 @@ GET http://localhost:8080/api/v1/doctors/1
 ###
 
 ### DELETE ONE ITEM
-DELETE http://localhost:8080/api/v1/items/3
+DELETE http://localhost:8080/api/v1/doctors/3
 
 ###
 
 ### CREATE ONE ITEM
-POST http://localhost:8080/api/v1/doctors
+POST http://localhost:8080/api/v1/doctors/
 Content-Type: application/json
 
 {
@@ -23,7 +23,7 @@ Content-Type: application/json
   "description": "cool"
 }
 ### UPDATE ONE ITEM
-PUT http://localhost:8080/api/v1/doctors
+PUT http://localhost:8080/api/v1/doctors/
 Content-Type: application/json
 
 {
