@@ -86,6 +86,22 @@ public class DoctorRestController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+    @GetMapping("/hello/user")
+    public String helloUser() {
+        return "Hello User!";
+    }
+
+    @GetMapping("hello/admin")
+    public String helloAdmin() {
+        return "Hello Admin!";
+    }
+
+    @GetMapping("hello/superadmin")
+    public String helloSuperadmin() {
+        return "Hello Superadmin!";
+    }
+
+
 
 
 }

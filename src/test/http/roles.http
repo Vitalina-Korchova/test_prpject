@@ -1,0 +1,59 @@
+### 1. GET ALL DOCTORS (ADMIN)
+GET http://localhost:8080/api/v1/doctors/
+Authorization: Basic admin admin
+Accept: application/json
+###
+
+### 2. GET ALL DOCTORS (USER)
+GET http://localhost:8080/api/v1/doctors/
+Authorization: Basic user user
+Accept: application/json
+###
+
+### 3. GET ALL DOCTORS (SUPERADMIN)
+GET http://localhost:8080/api/v1/doctors/
+Authorization: Basic superadmin superadmin
+Accept: application/json
+###
+
+### 4. GET ALL DOCTORS (BAD CREDS)
+GET http://localhost:8080/api/v1/doctors/
+Authorization: Basic admin admin12345
+Accept: application/json
+###
+
+### 5. HELLO ADMIN
+GET http://localhost:8080/api/v1/doctors/hello/admin
+Authorization: Basic admin admin
+Accept: text/plain
+###
+
+### 6. HELLO ADMIN (WRONG ROLE, USER tries ADMIN)
+GET http://localhost:8080/api/v1/doctors/hello/admin
+Authorization: Basic user user
+Accept: text/plain
+###
+
+### 7. HELLO USER
+GET http://localhost:8080/api/v1/doctors/hello/user
+Authorization: Basic user user
+Accept: text/plain
+###
+
+### 8. HELLO SUPERADMIN
+GET http://localhost:8080/api/v1/doctors/hello/superadmin
+Authorization: Basic superadmin superadmin
+Accept: text/plain
+###
+
+### 9. GET DOCTOR BY ID (SUPERADMIN)
+GET http://localhost:8080/api/v1/doctors/1
+Authorization: Basic superadmin superadmin
+Accept: application/json
+###
+
+### 10. GET DOCTOR BY ID (USER should fail)
+GET http://localhost:8080/api/v1/doctors/1
+Authorization: Basic user user
+Accept: application/json
+###
