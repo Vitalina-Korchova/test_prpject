@@ -15,6 +15,7 @@ import edu.korchova.testproject.service.DoctorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,12 +28,14 @@ public class DoctorRestController {
     private final DoctorService doctorService;
 
     // read all
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN','SUPERADMIN')")
     @GetMapping
     public ResponseEntity<List<Doctor>> showAll() {
         return ResponseEntity.ok(doctorService.getAll());
     }
 
     // read one
+    @PreAuthorize("hasAnyRole('ADMIN','SUPERADMIN')")
     @GetMapping("{id}")
     public ResponseEntity<?> showOneById(@PathVariable String id) {
         Doctor doctor = doctorService.getById(id);
@@ -86,16 +89,19 @@ public class DoctorRestController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/hello/user")
     public String helloUser() {
         return "Hello User!";
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("hello/admin")
     public String helloAdmin() {
         return "Hello Admin!";
     }
 
+    @PreAuthorize("hasRole('SUPERADMIN')")
     @GetMapping("hello/superadmin")
     public String helloSuperadmin() {
         return "Hello Superadmin!";

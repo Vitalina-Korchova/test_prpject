@@ -21,7 +21,7 @@ import java.util.Objects;
 @Data
 @Document
 @Builder
-public class Doctor {
+public class Doctor extends AuditMetadata {
     @Id
     private String id;
     private String name;
