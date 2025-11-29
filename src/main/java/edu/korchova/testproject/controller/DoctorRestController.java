@@ -28,14 +28,14 @@ public class DoctorRestController {
     private final DoctorService doctorService;
 
     // read all
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN','SUPERADMIN')")
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     @GetMapping
     public ResponseEntity<List<Doctor>> showAll() {
         return ResponseEntity.ok(doctorService.getAll());
     }
 
     // read one
-    @PreAuthorize("hasAnyRole('ADMIN','SUPERADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','SUPERADMIN')")
     @GetMapping("{id}")
     public ResponseEntity<?> showOneById(@PathVariable String id) {
         Doctor doctor = doctorService.getById(id);
@@ -89,26 +89,28 @@ public class DoctorRestController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/hello/user")
     public String helloUser() {
         return "Hello User!";
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("hello/admin")
     public String helloAdmin() {
         return "Hello Admin!";
     }
 
-    @PreAuthorize("hasRole('SUPERADMIN')")
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
+    @GetMapping("hello/unknown")
+    public String helloUnknown() {
+        return "Hello Unknown!";
+    }
+
+    @PreAuthorize("hasAuthority('SUPERADMIN')")
     @GetMapping("hello/superadmin")
     public String helloSuperadmin() {
         return "Hello Superadmin!";
     }
-
-
-
-
 }
 
